@@ -56,7 +56,7 @@ def receive_line_from_slave1():
     global shared_dict,list_of_lines,total_received,received,data_received
     print("listening on thread1")
     host = my_ip
-    port = 12002
+    port = 12001
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.bind((host, port))
     client_socket.listen()
@@ -112,7 +112,7 @@ def receive_line_from_slave2():
     global shared_dict,list_of_lines,total_received,received,data_received
     print("listening on thread2")
     host = my_ip
-    port = 13002
+    port = 13001
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.bind((host, port))
     client_socket.listen()
@@ -167,7 +167,7 @@ def receive_line_from_slave3():
     global shared_dict,list_of_lines,total_received,received,data_received
     print("listening on thread3")
     host = my_ip
-    port = 14002
+    port = 14001
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.bind((host, port))
     client_socket.listen()
@@ -221,7 +221,7 @@ def receive_line_from_slave3():
 def send_lines_to_slave1():
     global data_received,index1,slave1_ip
     host = my_ip
-    port = 12007
+    port = 12008
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.bind((host,port))
     client_socket.listen()
@@ -247,7 +247,7 @@ def send_lines_to_slave1():
 def send_lines_to_slave2():
     global data_received,index2
     host = my_ip
-    port = 13007
+    port = 13008
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.bind((host,port))
     client_socket.listen()
@@ -273,7 +273,7 @@ def send_lines_to_slave2():
 def send_lines_to_slave3():
     global data_received,index3
     host = my_ip
-    port = 14007
+    port = 14008
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.bind((host,port))
     client_socket.listen()
@@ -293,7 +293,7 @@ def send_lines_to_slave3():
             except OSError as e:
                 break
             if (received_message == "RECEIVED"):
-                index1+=1
+                index3+=1
     client_socket.close()
 
 
@@ -306,23 +306,23 @@ def main():
     thread2.start()
     thread3 = threading.Thread(target = receive_line_from_slave2) 
     thread3.start()    
-    # thread4 = threading.Thread(target = receive_line_from_slave3)
-    # thread4.start()
+    thread4 = threading.Thread(target = receive_line_from_slave3)
+    thread4.start()
     thread5 = threading.Thread(target = send_lines_to_slave1) 
     thread5.start()
     thread6 = threading.Thread(target = send_lines_to_slave2) 
     thread6.start()    
-    # thread7 = threading.Thread(target = send_lines_to_slave3)
-    # thread7.start()
+    thread7 = threading.Thread(target = send_lines_to_slave3)
+    thread7.start()
 
 
     thread1.join()
     thread2.join()  
     thread3.join()  
-    # thread4.join() 
+    thread4.join() 
     thread5.join()  
     thread6.join()  
-    # thread7.join() 
+    thread7.join() 
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect(server_address)
